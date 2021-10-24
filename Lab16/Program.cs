@@ -32,11 +32,7 @@ namespace Lab16
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
             };
-
-
             string json1 = JsonSerializer.Serialize(products, options);
-
-
             string path = "Products.json";
             if (!File.Exists(path))
             {
@@ -73,17 +69,10 @@ namespace Lab16
                             max = products2[j].PriceProduct;
                             nameMax = products2[j].NameProduct;
                         }
-
                     }
-
                 }
                 Console.WriteLine("Самый дорогой товар {0} по цене {1}", nameMax, max);
-
             }
-
-
-
-
             Console.ReadKey();
         }
     }
