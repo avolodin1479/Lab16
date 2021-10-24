@@ -35,7 +35,7 @@ namespace Lab16
 
 
             string json1 = JsonSerializer.Serialize(products, options);
-            Console.WriteLine(json1);
+
 
             string path = "Products.json";
             if (!File.Exists(path))
@@ -47,41 +47,42 @@ namespace Lab16
                 sw.WriteLine(json1);
             }
 
-            using (StreamReader sr = new StreamReader(path))
+            using (StreamReader sr = new StreamReader(path, Encoding.Default))
             {
-                try
-                {
-                    string json2 = sr.ReadToEnd();
-                    Product products2 = JsonSerializer.Deserialize<Product>(json2);
 
-                }
-                catch { }
-            }
-            
-            double max = 0;
-            string nameMax= null;
-            for (int i = 0; i < 5; i++)
-            {
-                for (int j = i + 1; j < 4; j++)
+                string json2 = sr.ReadToEnd();
+                JsonSerializerOptions options2 = new JsonSerializerOptions()
                 {
-                    if (products[i].PriceProduct > products[j].PriceProduct)
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
+                };
+                Product[] products2 = JsonSerializer.Deserialize<Product[]>(json2, options2);
+                double max = 0;
+                string nameMax = null;
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = i + 1; j < 4; j++)
                     {
-                        double temp = products[i].PriceProduct; 
-                        string temp2 = products[i].NameProduct;
+                        if (products2[i].PriceProduct > products2[j].PriceProduct)
+                        {
+                            double temp = products2[i].PriceProduct;
+                            string temp2 = products2[i].NameProduct;
+                            products2[i].PriceProduct = products2[j].PriceProduct;
+                            products2[i].NameProduct = products2[j].NameProduct;
+                            products2[j].PriceProduct = temp;
+                            products2[j].NameProduct = temp2;
+                            max = products2[j].PriceProduct;
+                            nameMax = products2[j].NameProduct;
+                        }
 
-                        products[i].PriceProduct = products[j].PriceProduct;
-                        products[i].NameProduct = products[j].NameProduct;
-
-                        products[j].PriceProduct = temp;
-                        products[j].NameProduct = temp2;
-
-                        max = products[j].PriceProduct;
-                        nameMax= products[j].NameProduct;
                     }
+
                 }
+                Console.WriteLine("Самый дорогой товар {0} по цене {1}", nameMax, max);
+
             }
-            Console.WriteLine("Самый дорогой товар {0} по цене {1}", nameMax, max);
-            
+
+
+
 
             Console.ReadKey();
         }
@@ -95,7 +96,7 @@ namespace Lab16
         { CodProduct = codProduct; NameProduct = nameProduct; PriceProduct = priceProduct; }
     }
 
-    
+
 }
 
 
