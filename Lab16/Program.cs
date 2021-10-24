@@ -53,20 +53,35 @@ namespace Lab16
                 {
                     string json2 = sr.ReadToEnd();
                     Product products2 = JsonSerializer.Deserialize<Product>(json2);
+
                 }
                 catch { }
             }
-
+            
             double max = 0;
-            foreach (Product.PriceProduct i in products)
+            string nameMax= null;
+            for (int i = 0; i < 5; i++)
             {
-                if (products[i].PriceProduct > max)
-                    max = products[i].PriceProduct;
+                for (int j = i + 1; j < 4; j++)
+                {
+                    if (products[i].PriceProduct > products[j].PriceProduct)
+                    {
+                        double temp = products[i].PriceProduct; 
+                        string temp2 = products[i].NameProduct;
+
+                        products[i].PriceProduct = products[j].PriceProduct;
+                        products[i].NameProduct = products[j].NameProduct;
+
+                        products[j].PriceProduct = temp;
+                        products[j].NameProduct = temp2;
+
+                        max = products[j].PriceProduct;
+                        nameMax= products[j].NameProduct;
+                    }
+                }
             }
-            Console.WriteLine();
-            Console.WriteLine("Максимальное значение {0}", max);
-
-
+            Console.WriteLine("Самый дорогой товар {0} по цене {1}", nameMax, max);
+            
 
             Console.ReadKey();
         }
@@ -78,8 +93,9 @@ namespace Lab16
         public double PriceProduct { get; set; }
         public Product(int codProduct, string nameProduct, double priceProduct)
         { CodProduct = codProduct; NameProduct = nameProduct; PriceProduct = priceProduct; }
-
     }
+
+    
 }
 
 
